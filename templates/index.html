@@ -9,20 +9,44 @@
     <!-- Include Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
     <style>
         /* Custom Styles */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #f2f2f2, #e6e6e6);
         }
         
         .container {
             max-width: 700px;
-            margin-top: 50px;
+            margin: 100px auto;
             background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: fadeInUp 0.5s forwards 0.5s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-weight: 600;
+            margin-bottom: 30px;
         }
         
         label {
@@ -31,10 +55,38 @@
             padding: 10px 15px;
             border-radius: 4px;
             cursor: pointer;
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        label:hover {
+            background-color: #0056b3;
+            transform: translateY(-3px);
         }
         
         h3 {
-            margin-top: 20px;
+            margin-top: 40px;
+            font-weight: 600;
+        }
+
+        button {
+            background-color: #007bff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #imagePreview img {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        #imagePreview:hover img {
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -52,7 +104,7 @@
             <!-- Placeholder for instant image preview -->
             <div class="text-center mt-4" id="imagePreview">
                 {% if img_url %}
-                    <img src="{{ img_url }}" alt="Uploaded Image" class="img-fluid" style="max-height: 400px;">
+                    <img src="{{ img_url }}" alt="Uploaded Image" class="img-fluid" style="max-height: 400px; border-radius: 8px;">
                 {% endif %}
             </div>
             
@@ -77,7 +129,7 @@
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                    $('#imagePreview').html('<img src="'+e.target.result+'" alt="Uploaded Image" class="img-fluid" style="max-height: 400px;">');
+                    $('#imagePreview').html('<img src="'+e.target.result+'" alt="Uploaded Image" class="img-fluid" style="max-height: 400px; border-radius: 8px;">');
                 }
                 reader.readAsDataURL(input.files[0]);
             }
