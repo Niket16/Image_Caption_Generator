@@ -1,21 +1,95 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Caption Generator</title>
-</head>
-<body>
-    <h1>Image Caption Generator</h1>
-    <form action="/" method="post" enctype="multipart/form-data">
-        <!-- File input button -->
-        <input type="file" name="image_file" id="fileInput" style="display: none;">
-        <label for="fileInput" style="cursor: pointer;">Choose File</label>
+    
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
         
-        <!-- Submit button -->
-        <input type="submit" value="Generate Caption">
-    </form>
-    {% if caption %}
-    <h3>Generated Caption:</h3>
-    <p>{{ caption }}</p>
-    {% endif %}
+        .container {
+            max-width: 700px;
+            margin-top: 50px;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        label {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        h3 {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center">Image Caption Generator</h1>
+        <form action="/" method="post" enctype="multipart/form-data">
+            <!-- File input button -->
+            <div class="custom-file mt-4">
+                <input type="file" class="custom-file-input" id="fileInput" name="image_file">
+                <label class="custom-file-label" for="fileInput">Choose file</label>
+            </div>
+            
+            <!-- Placeholder for instant image preview -->
+            <div class="text-center mt-4" id="imagePreview">
+                {% if img_url %}
+                    <img src="{{ img_url }}" alt="Uploaded Image" class="img-fluid" style="max-height: 400px;">
+                {% endif %}
+            </div>
+            
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block mt-4">Generate Caption</button>
+        </form>
+                
+        {% if caption %}
+        <h3>Generated Caption:</h3>
+        <p>{{ caption }}</p>
+        {% endif %}
+    </div>
+    
+    <!-- Include Bootstrap JS and Popper.js -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <!-- Script for instant image preview and to show the selected file name in the label -->
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imagePreview').html('<img src="'+e.target.result+'" alt="Uploaded Image" class="img-fluid" style="max-height: 400px;">');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $('#fileInput').change(function(){
+            readURL(this);
+            // Update the file name label
+            var fileName = $(this).val().split('\\').pop(); 
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
 </body>
+
 </html>

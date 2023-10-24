@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
+
 # Additional imports from generate.py
 import os
 import json
@@ -101,29 +102,27 @@ def runModel(img_name):
     print(caption)
     return caption
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='uploads')
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     caption = ""
+    img_url = None  # Initialize img_url to None
+
     if request.method == 'POST':
-        # Check if 'image_file' was submitted in the form
         if 'image_file' in request.files:
             img_file = request.files['image_file']
-            
-            # Check if the file is not empty
+
             if img_file.filename != '':
                 img_path = os.path.join("uploads", img_file.filename)
                 img_file.save(img_path)
-                
-                # Generate caption
-                caption = runModel(img_path)
-                
-                # Optionally, delete the uploaded image after processing
-                os.remove(img_path)
-            
-    return render_template('index.html', caption=caption)
 
+                # Get the URL for the uploaded image
+                img_url = url_for('static', filename=img_file.filename)
+
+                caption = runModel(img_path)
+
+    return render_template('index.html', caption=caption, img_url=img_url)  # Pass img_url to the template
 
 if __name__ == '__main__':
     app.run(debug=True)
