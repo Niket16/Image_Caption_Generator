@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Caption Generator</title>
+</head>
+<body>
+    <h1>Image Caption Generator</h1>
+    <form action="/" method="post" enctype="multipart/form-data">
+        <!-- File input button -->
+        <input type="file" name="image_file" id="fileInput" style="display: none;">
+        <label for="fileInput" style="cursor: pointer;">Choose File</label>
+        
+        <!-- Submit button -->
+        <input type="submit" value="Generate Caption">
+    </form>
+    {% if caption %}
+    <h3>Generated Caption:</h3>
+    <p>{{ caption }}</p>
+    {% endif %}
+</body>
+</html>
