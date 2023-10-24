@@ -1,6 +1,4 @@
 from flask import Flask, render_template, request, url_for
-
-# Additional imports from generate.py
 import os
 import json
 from keras.models import load_model, Model  # Import the Model class
@@ -13,6 +11,7 @@ from keras.applications.resnet50 import ResNet50, preprocess_input
 from matplotlib import pyplot as plt
 
 
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png'}
 
 
 # Read the files word_to_idx.pkl and idx_to_word.pkl to get the mappings between word and index
@@ -102,6 +101,13 @@ def runModel(img_name):
     print(caption)
     return caption
 
+def allowed_file(filename):
+    """
+    Check if the filename is allowed based on its extension.
+    """
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 app = Flask(__name__, static_folder='uploads')
 
 @app.route('/', methods=['GET', 'POST'])
@@ -113,7 +119,14 @@ def index():
         if 'image_file' in request.files:
             img_file = request.files['image_file']
 
-            if img_file.filename != '':
+            if img_file.filename == '':
+                caption = "No selected file."
+
+            elif not allowed_file(img_file.filename):
+                # Handle the invalid file format here immediately upon upload
+                caption = "Invalid file format. Please upload a .jpg, .jpeg, or .png file."
+
+            else:
                 img_path = os.path.join("uploads", img_file.filename)
                 img_file.save(img_path)
 
